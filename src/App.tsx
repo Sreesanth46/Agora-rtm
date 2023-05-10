@@ -1,17 +1,20 @@
-// import { useState } from "react";
-import "./App.css";
-import Greet from "./components/Greet";
-import { Message } from "./components/Message";
-import { ParentComponent } from "./components/ParentComponent";
+// import "./App.css";
+// import { Dashboard } from "./components/Dashboard";
+// import Greet from "./components/Greet";
+// import { Login } from "./components/LoginPage";
+// import { Message } from "./components/Message";
+// import { ParentComponent } from "./components/ParentComponent";
+import Demo from "./components/Demo";
 
 function App() {
-    // const [count, setCount] = useState(0);
-
     return (
         <>
-            <Greet name="test" heroName="Batman" />
-            <Message />
-            <ParentComponent />
+            {/* <Greet name="test" heroName="Batman" /> */}
+            {/* <Message /> */}
+            {/* <ParentComponent /> */}
+            {/* <Login /> */}
+            {/* <Dashboard /> */}
+            <Demo></Demo>
         </>
     );
 }
