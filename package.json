@@ -10,6 +10,8 @@
         "preview": "vite preview"
     },
     "dependencies": {
+        "agora-chat": "^1.1.0",
+        "agora-rtc-sdk-ng": "^4.17.2",
         "agora-rtm-sdk": "latest",
         "axios": "^1.4.0",
         "react": "^18.2.0",

@@ -4,7 +4,10 @@
 // import { Login } from "./components/LoginPage";
 // import { Message } from "./components/Message";
 // import { ParentComponent } from "./components/ParentComponent";
-import Demo from "./components/Demo";
+// import Demo from "./components/Demo";
+import { VideoDashboard } from "./components/VideoDashboard";
+
+// import { Chat } from "./components/Chat";
 
 function App() {
     return (
@@ -14,7 +17,9 @@ function App() {
             {/* <ParentComponent /> */}
             {/* <Login /> */}
             {/* <Dashboard /> */}
-            <Demo></Demo>
+            {/* <Demo /> */}
+            <VideoDashboard />
+            {/* <Chat /> */}
         </>
     );
 }
