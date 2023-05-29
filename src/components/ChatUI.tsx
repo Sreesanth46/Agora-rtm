@@ -70,11 +70,14 @@ export const ChatUI = () => {
     ]);
 
     useEffect(() => {
-        return () => {
-            setTimeout(() => {
-                alert("Components Unloaded successfully");
-            }, 1000);
-        };
+        function beforeUnloadListener(event: any) {
+            event.preventDefault();
+            event.returnValue = "";
+        }
+
+        addEventListener("beforeunload", beforeUnloadListener, {
+            capture: true,
+        });
     }, []);
 
     const sendMessage = (message: string, e: any) => {
