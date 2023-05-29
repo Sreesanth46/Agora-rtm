@@ -1,17 +1,29 @@
-// import { useState } from "react";
-import "./App.css";
-import Greet from "./components/Greet";
-import { Message } from "./components/Message";
-import { ParentComponent } from "./components/ParentComponent";
+import React from "react";
+import { CssBaseline, Typography } from "@mui/material";
+import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
+import { Dashboard } from "./components/Dashboard/Dashboard";
+import { Video } from "./components/Video/Video";
 
 function App() {
-    // const [count, setCount] = useState(0);
-
     return (
         <>
-            <Greet name="test" heroName="Batman" />
-            <Message />
-            <ParentComponent />
+            <React.Fragment>
+                <CssBaseline />
+                <Router>
+                    <Routes>
+                        <Route path={"/"} element={<Dashboard />} />
+                        <Route path={"/join/:channel"} element={<Video />} />
+                        <Route
+                            path="*"
+                            element={
+                                <Typography variant="h2" align="center">
+                                    Not found
+                                </Typography>
+                            }
+                        />
+                    </Routes>
+                </Router>
+            </React.Fragment>
         </>
     );
 }
