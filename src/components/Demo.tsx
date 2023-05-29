@@ -36,7 +36,7 @@ const Demo: React.FC = () => {
                     },
                 ]);
             });
-            getMessage();
+            // getMessage();
             setChannel(channel);
         };
         connect();
@@ -65,40 +65,40 @@ const Demo: React.FC = () => {
     const postMessage = async (uid: string, text: string) => {
         const data = { senderId: uid, messageContent: text };
 
-        axios
-            .post("http://localhost:8080/messages", data)
-            .then((res) => {
-                if (res.status === 200) {
-                    console.log("Message saved successfully");
-                }
-            })
-            .catch(() => {
-                console.log("Couldn't save message");
-            });
+        // axios
+        //     .post("http://localhost:8080/messages", data)
+        //     .then((res) => {
+        //         if (res.status === 200) {
+        //             console.log("Message saved successfully");
+        //         }
+        //     })
+        //     .catch(() => {
+        //         console.log("Couldn't save message");
+        //     });
     };
 
-    const getMessage = async () => {
-        axios
-            .get("http://localhost:8080/messages")
-            .then((res) => {
-                res.data.forEach((element: any) => {
-                    let { messageContent } = element;
-                    let { senderId } = element;
+    // const getMessage = async () => {
+    //     axios
+    //         .get("http://localhost:8080/messages")
+    //         .then((res) => {
+    //             res.data.forEach((element: any) => {
+    //                 let { messageContent } = element;
+    //                 let { senderId } = element;
 
-                    setMessages((currentMessage: any) => [
-                        ...currentMessage,
-                        {
-                            uid: senderId,
-                            text: messageContent,
-                        },
-                    ]);
-                });
-            })
-            .catch(() => {
-                console.log("Couldn't retieve message");
-            });
-        console.log("Set messages", messages);
-    };
+    //                 setMessages((currentMessage: any) => [
+    //                     ...currentMessage,
+    //                     {
+    //                         uid: senderId,
+    //                         text: messageContent,
+    //                     },
+    //                 ]);
+    //             });
+    //         })
+    //         .catch(() => {
+    //             console.log("Couldn't retieve message");
+    //         });
+    //     console.log("Set messages", messages);
+    // };
 
     return (
         <>
