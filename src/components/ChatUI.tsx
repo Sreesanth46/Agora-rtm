@@ -9,13 +9,19 @@ import {
     Typography,
 } from "@mui/material";
 import style from "./ChatUI.module.scss";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePhotoGallery } from "../hooks/usePhotoGallery";
 import { IonCol, IonGrid, IonImg, IonRow } from "@ionic/react";
+import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
 
 export const ChatUI = () => {
     const uid = "user1-Unique";
     const [input, setInput] = useState<string>("");
+    const fileInputRef = useRef<HTMLInputElement>();
+    const [selectedImages, setSelectedImages] = useState<any>([]);
+    const [activeImages, setActiveImages] = useState<any>([]);
     const [messages, setMessages] = useState([
         {
             userName: "user1",
@@ -102,6 +108,48 @@ export const ChatUI = () => {
     };
 
     const { takePhoto, photos } = usePhotoGallery();
+
+    const handleFileChange = (event: any) => {
+        const files = event.target.files;
+        const imageUrls: any = [];
+
+        if (event === null || undefined) return;
+
+        for (const element of files) {
+            const file = element;
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                imageUrls.push(e.target!.result);
+                if (imageUrls.length === files.length) {
+                    setSelectedImages([...selectedImages, ...imageUrls]);
+                }
+            };
+
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handlePaste = (event: any) => {
+        const items = (event.clipboardData || event.originalEvent.clipboardData)
+            .items;
+
+        for (const element of items) {
+            const item = element;
+            if (item.type.includes("image")) {
+                console.log("-------------------------------- Item: ", item);
+                const blob = item.getAsFile();
+                console.log("-------------------------------- blob: ", blob);
+                const reader = new FileReader();
+
+                reader.onloadend = () => {
+                    console.log("-----------------", reader.result);
+                    setSelectedImages([...selectedImages, reader.result]);
+                };
+                reader.readAsDataURL(blob);
+            }
+        }
+    };
 
     return (
         <>
@@ -267,14 +315,14 @@ export const ChatUI = () => {
                             })}
                         </Box>
                         <Box className={style.messagebody}>
-                            {/* <Button
+                            <Button
                                 size="small"
                                 variant="contained"
                                 className={style.sendbutton}
                                 onClick={() => takePhoto()}
                             >
                                 +
-                            </Button> */}
+                            </Button>
                             <form onSubmit={(e: any) => sendMessage(input, e)}>
                                 <Input
                                     className={style.messageinput}
@@ -284,6 +332,7 @@ export const ChatUI = () => {
                                     placeholder="Send a message to everyone"
                                     type="text"
                                     value={input}
+                                    onPaste={handlePaste}
                                     onChange={(e) => setInput(e.target.value)}
                                 />
                                 <Button
@@ -300,6 +349,57 @@ export const ChatUI = () => {
                     </Box>
                 </Paper>
             </Slide>
+            <div>
+                <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    ref={fileInputRef as React.RefObject<HTMLInputElement>}
+                    onChange={handleFileChange}
+                    // style={{ display: "none" }}
+                />
+                {/* <AttachFileIcon onClick={() => fileInputRef.current!.click()} /> */}
+            </div>
+
+            <ImageList
+                sx={{ maxWidth: 500, maxHeight: 450 }}
+                cols={3}
+                rowHeight={164}
+            >
+                {selectedImages.map((item: any, i: any) => (
+                    <ImageListItem key={i}>
+                        <HighlightOffOutlinedIcon
+                            onClick={() => {
+                                setSelectedImages(
+                                    selectedImages.filter(
+                                        (image: any) => image !== item
+                                    )
+                                );
+                            }}
+                            style={{ position: "absolute", right: 0 }}
+                        />
+                        <img
+                            className={
+                                activeImages.some((e: any) => e === i)
+                                    ? style.activeColor
+                                    : ""
+                            }
+                            onClick={() => {
+                                const index = activeImages.indexOf(i);
+                                if (index > -1) {
+                                    setActiveImages(
+                                        activeImages.filter((e: any) => e !== i)
+                                    );
+                                } else {
+                                    setActiveImages([...activeImages, i]);
+                                }
+                            }}
+                            src={`${item}`}
+                            srcSet={`${item}`}
+                        />
+                    </ImageListItem>
+                ))}
+            </ImageList>
             <IonGrid>
                 <IonRow>
                     {photos.map((photo, index) => (

@@ -60,3 +60,17 @@
 .chat::-webkit-scrollbar {
   display: none;
 }
+
+.activeColor {
+  background-color: red;
+  padding: 2px;
+}
+
+.closeButton {
+  position: "absolute"; 
+  right: 0;
+}
+
+.closeButton:hover {
+  color: red !important;
+}
