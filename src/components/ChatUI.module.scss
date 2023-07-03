@@ -9,15 +9,19 @@
 }
 
 .messageinput{
-  width: 96%;
+  width: 40vw;
   bottom: 15px;
-  border: 0;
+  border: none;
   border-radius: 10px;
   left: 8px;
   background-color: #e4fbcc;
   font-family: none;
   padding-left: 5px !important;
   padding-right: 5px !important;
+}
+
+.messageGrid {
+  background-color: #e4fbcc;
 }
 
 .messagebody{
@@ -69,6 +73,7 @@
 .closeButton {
   position: "absolute"; 
   right: 0;
+  z-index: 1;
 }
 
 .closeButton:hover {

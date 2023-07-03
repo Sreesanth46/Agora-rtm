@@ -76,6 +76,32 @@ export const ChatUI = () => {
     ]);
 
     useEffect(() => {
+        fileInputRef.current?.addEventListener("dragover", (e: any) => {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+        fileInputRef.current?.addEventListener("drop", (e: any) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const imageUrls: any = [];
+
+            const { files } = e.dataTransfer;
+            for (const element of files) {
+                const file = element;
+                const reader = new FileReader();
+
+                reader.onload = (e) => {
+                    imageUrls.push(e.target!.result);
+                    if (imageUrls.length === files.length) {
+                        setSelectedImages([...selectedImages, ...imageUrls]);
+                    }
+                };
+
+                reader.readAsDataURL(file);
+            }
+            console.log("drop event", files);
+        });
+
         function beforeUnloadListener(event: any) {
             event.preventDefault();
             event.returnValue = "";
@@ -324,17 +350,85 @@ export const ChatUI = () => {
                                 +
                             </Button>
                             <form onSubmit={(e: any) => sendMessage(input, e)}>
-                                <Input
+                                <div
                                     className={style.messageinput}
-                                    disableUnderline
-                                    // multiline
-                                    maxRows={2}
-                                    placeholder="Send a message to everyone"
-                                    type="text"
-                                    value={input}
-                                    onPaste={handlePaste}
-                                    onChange={(e) => setInput(e.target.value)}
-                                />
+                                    ref={
+                                        fileInputRef as React.RefObject<HTMLInputElement>
+                                    }
+                                >
+                                    <Input
+                                        sx={{
+                                            width: "100%",
+                                        }}
+                                        disableUnderline
+                                        multiline
+                                        maxRows={2}
+                                        placeholder="Send a message to everyone"
+                                        type="text"
+                                        value={input}
+                                        onPaste={handlePaste}
+                                        onChange={(e) =>
+                                            setInput(e.target.value)
+                                        }
+                                    />
+                                    <Grid
+                                        sx={{
+                                            xs: 2,
+                                            sm: 3,
+                                            lg: 6,
+                                            display: "flex",
+                                            flexWrap: "wrap",
+                                            gap: 1,
+                                            position: "relative",
+                                        }}
+                                    >
+                                        {selectedImages.map(
+                                            (item: any, i: any) => (
+                                                <div
+                                                    key={i}
+                                                    style={{
+                                                        position: "relative",
+                                                        width: "200px",
+                                                    }}
+                                                >
+                                                    <HighlightOffOutlinedIcon
+                                                        onClick={() => {
+                                                            setSelectedImages(
+                                                                selectedImages.filter(
+                                                                    (
+                                                                        image: any
+                                                                    ) =>
+                                                                        image !==
+                                                                        item
+                                                                )
+                                                            );
+                                                        }}
+                                                        className={
+                                                            style.closeButton
+                                                        }
+                                                        style={{
+                                                            position:
+                                                                "absolute",
+                                                            // fill: "blue",
+                                                            right: 0,
+                                                            zIndex: 1,
+                                                        }}
+                                                    />
+                                                    <img
+                                                        style={{
+                                                            width: "100%",
+                                                            aspectRatio: 16 / 9,
+                                                            objectFit:
+                                                                "contain",
+                                                        }}
+                                                        src={`${item}`}
+                                                        srcSet={`${item}`}
+                                                    />
+                                                </div>
+                                            )
+                                        )}
+                                    </Grid>
+                                </div>
                                 <Button
                                     variant="contained"
                                     size="small"
@@ -354,7 +448,6 @@ export const ChatUI = () => {
                     type="file"
                     accept="image/*"
                     multiple
-                    ref={fileInputRef as React.RefObject<HTMLInputElement>}
                     onChange={handleFileChange}
                     // style={{ display: "none" }}
                 />
